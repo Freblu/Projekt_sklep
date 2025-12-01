@@ -1,0 +1,93 @@
+@import url(./theme.css);
+
+.top-nav,
+.mid-nav,
+.bottom-nav {
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  width: 100%;
+  max-width: 82.5rem;
+}
+
+.top-nav ul,
+.top-nav,
+.mid-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.top-nav ul {
+  justify-content: center;
+  list-style-type: none;
+  margin: 0 0.5rem;
+  padding: 0;
+}
+
+.top-nav li {
+  margin: 0 0.4rem;
+}
+
+.top-nav p {
+  margin: 0;
+}
+
+.v-divider {
+  background-color: var(--divider-color);
+  height: 1.5rem;
+  width: 1px;
+  margin: 0 0.5rem;
+}
+
+.divider {
+  background-color: var(--divider-color);
+  height: 1px;
+  width: 100%;
+}
+
+.socials-links-container {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.socials-links {
+  background-color: var(--secondary-700);
+}
+
+.top-nav-select {
+  all: unset;
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  font: inherit;
+  color: var(--white);
+  padding: 0 1.25rem 0 0;
+  background-color: transparent;
+  background-image: url("../../assets/arrow-down.svg");
+  background-repeat: no-repeat;
+  background-position: right 0.25rem center;
+  background-size: 0.75rem;
+  width: fit-content;
+}
+
+select.top-nav-select option {
+  color: var(--gray-600);
+}
+
+.top-nav-select::-ms-expand {
+  display: none;
+}
+
+.top-nav-select-container {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  margin-right: 0.5rem;
+}
+
+.top-nav-select-container svg path {
+  stroke: var(--white);
+}

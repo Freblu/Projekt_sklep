@@ -1,0 +1,358 @@
+@model AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+<link rel="stylesheet" href="~/css/dashboard/admin-dashboard.css" asp-append-version="true" />
+
+<div class="container-fluid p-0 admin-dashboard">
+    <div class="row">
+        <!-- ADMIN SIDEBAR -->
+        <aside class="col-12 col-lg-2">
+            <nav class="admin-aside">
+                <div class="admin-aside__header">
+                    <h4>Admin Panel</h4>
+                </div>
+                <a class="admin-aside__link admin-aside__link--active" asp-controller="Admin" asp-action="Index">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    Dashboard
+                </a>
+                <a class="admin-aside__link" asp-controller="Admin" asp-action="Products">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 7H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2Z"/>
+                        <path d="M9 20v-8h6v8"/>
+                        <path d="M3 7v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7"/>
+                    </svg>
+                    Products
+                </a>
+                <a class="admin-aside__link" asp-controller="Admin" asp-action="Orders">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 2L3 6v14c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2V6l-3-4H6z"/>
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <path d="M16 10a4 4 0 1 1-8 0"/>
+                    </svg>
+                    Orders
+                </a>
+                <a class="admin-aside__link" asp-controller="Admin" asp-action="Customers">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    Customers
+                </a>
+                <a class="admin-aside__link" asp-controller="Admin" asp-action="Settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 1v6m0 6v6"/>
+                        <path d="m4.2 4.2 4.2 4.2m7.2 7.2 4.2 4.2"/>
+                        <path d="M1 12h6m6 0h6"/>
+                        <path d="m4.2 19.8 4.2-4.2m7.2-7.2 4.2-4.2"/>
+                    </svg>
+                    Settings
+                </a>
+                <a class="admin-aside__link admin-aside__link--logout" asp-controller="Auth" asp-action="Logout">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    Logout
+                </a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="col-12 col-lg-10">
+            <!-- HEADER -->
+            <header class="admin-header">
+                <div>
+                    <h3 class="admin-title">Dashboard Overview</h3>
+                    <p class="admin-subtitle">Manage your e-commerce platform</p>
+                </div>
+                <div class="admin-header__actions">
+                    <button class="admin-btn admin-btn--outline">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                        Export
+                    </button>
+                </div>
+            </header>
+
+            <!-- STATS CARDS -->
+            <div class="row g-3 mb-4">
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="stat-card stat-card--blue">
+                        <div class="stat-card__icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 7H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2Z"/>
+                                <path d="M9 20v-8h6v8"/>
+                                <path d="M3 7v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7"/>
+                            </svg>
+                        </div>
+                        <div class="stat-card__body">
+                            <div class="stat-card__value">@Model.Stats.TotalProducts</div>
+                            <div class="stat-card__label">Total Products</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="stat-card stat-card--orange">
+                        <div class="stat-card__icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 2L3 6v14c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2V6l-3-4H6z"/>
+                                <line x1="3" y1="6" x2="21" y2="6"/>
+                                <path d="M16 10a4 4 0 1 1-8 0"/>
+                            </svg>
+                        </div>
+                        <div class="stat-card__body">
+                            <div class="stat-card__value">@Model.Stats.TotalOrders</div>
+                            <div class="stat-card__label">Total Orders</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="stat-card stat-card--green">
+                        <div class="stat-card__icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <div class="stat-card__body">
+                            <div class="stat-card__value">@Model.Stats.TotalCustomers</div>
+                            <div class="stat-card__label">Total Customers</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="stat-card stat-card--purple">
+                        <div class="stat-card__icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="1" x2="12" y2="23"/>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                            </svg>
+                        </div>
+                        <div class="stat-card__body">
+                            <div class="stat-card__value">@Model.Stats.TotalRevenue.ToString("C0")</div>
+                            <div class="stat-card__label">Total Revenue</div>
+                            <div class="stat-card__growth stat-card__growth--positive">
+                                +@Model.Stats.RevenueGrowth%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ALERT CARDS -->
+            <div class="row g-3 mb-4">
+                <div class="col-12 col-md-6">
+                    <div class="alert-card alert-card--warning">
+                        <div class="alert-card__icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                <line x1="12" y1="9" x2="12" y2="13"/>
+                                <line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="alert-card__title">Low Stock Alert</div>
+                            <div class="alert-card__text">@Model.Stats.LowStockProducts products are running low on stock</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="alert-card alert-card--danger">
+                        <div class="alert-card__icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="alert-card__title">Out of Stock</div>
+                            <div class="alert-card__text">@Model.Stats.OutOfStockProducts products are out of stock</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <!-- RECENT PRODUCTS -->
+                <div class="col-12 col-xl-8">
+                    <section class="admin-card">
+                        <div class="admin-card__header">
+                            <h5 class="admin-h5">Recent Products</h5>
+                            <a asp-controller="Admin" asp-action="Products" class="admin-link">View All →</a>
+                        </div>
+
+                        <div class="admin-table">
+                            <div class="admin-table__row admin-table__row--head">
+                                <div>Product</div>
+                                <div>Category</div>
+                                <div>Price</div>
+                                <div>Stock</div>
+                                <div>Status</div>
+                                <div class="admin-ta-right">Actions</div>
+                            </div>
+
+                            @foreach (var p in Model.RecentProducts)
+                            {
+                                <div class="admin-table__row">
+                                    <div class="admin-table__product">
+                                        <img src="@p.ImageUrl" alt="@p.Name" class="admin-table__img" />
+                                        <span>@p.Name</span>
+                                    </div>
+                                    <div>@p.Category</div>
+                                    <div>@p.Price.ToString("C")</div>
+                                    <div>
+                                        @{
+                                            string stockBadgeClass;
+                                            if (p.Stock == 0)
+                                            {
+                                                stockBadgeClass = "stock-badge--out";
+                                            }
+                                            else if (p.Stock < 10)
+                                            {
+                                                stockBadgeClass = "stock-badge--low";
+                                            }
+                                            else
+                                            {
+                                                stockBadgeClass = "stock-badge--ok";
+                                            }
+                                        }
+                                        <span class="stock-badge @stockBadgeClass">
+                                            @p.Stock
+                                        </span>
+                                    </div>
+                                    <div>
+                                        @{
+                                            string statusBadgeClass;
+                                            if (p.Status == "Active")
+                                            {
+                                                statusBadgeClass = "status-badge--active";
+                                            }
+                                            else if (p.Status == "Low Stock")
+                                            {
+                                                statusBadgeClass = "status-badge--warning";
+                                            }
+                                            else
+                                            {
+                                                statusBadgeClass = "status-badge--danger";
+                                            }
+                                        }
+                                        <span class="status-badge @statusBadgeClass">
+                                            @p.Status
+                                        </span>
+                                    </div>
+                                    <div class="admin-ta-right">
+                                        <div class="admin-actions">
+                                            <a asp-controller="Admin" asp-action="ProductEdit" asp-route-id="@p.Id" class="admin-action" title="Edit">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                                </svg>
+                                            </a>
+                                            <form method="post" asp-controller="Admin" asp-action="ProductDelete" asp-route-id="@p.Id" style="display:inline;">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="admin-action admin-action--danger" title="Delete" onclick="return confirm('Are you sure you want to delete this product?');">
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                        <polyline points="3 6 5 6 21 6"/>
+                                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                                        <line x1="10" y1="11" x2="10" y2="17"/>
+                                                        <line x1="14" y1="11" x2="14" y2="17"/>
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="admin-card__footer">
+                            <a asp-controller="Admin" asp-action="ProductCreate" class="admin-btn admin-btn--primary">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"/>
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                                Add New Product
+                            </a>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- RECENT ORDERS -->
+                <div class="col-12 col-xl-4">
+                    <section class="admin-card">
+                        <div class="admin-card__header">
+                            <h5 class="admin-h5">Recent Orders</h5>
+                            <a asp-controller="Admin" asp-action="Orders" class="admin-link">View All →</a>
+                        </div>
+
+                        <div class="order-list">
+                            @foreach (var o in Model.RecentOrders)
+                            {
+                                <div class="order-item">
+                                    <div class="order-item__header">
+                                        <div class="order-item__id">@o.OrderId</div>
+                                        <span class="status-badge @o.StatusClass">@o.Status</span>
+                                    </div>
+                                    <div class="order-item__customer">@o.CustomerName</div>
+                                    <div class="order-item__footer">
+                                        <span class="order-item__date">@o.Date.ToString("MMM dd, HH:mm")</span>
+                                        <span class="order-item__total">@o.Total.ToString("C")</span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </section>
+
+                    <!-- QUICK STATS -->
+                    <section class="admin-card mt-3">
+                        <div class="admin-card__header">
+                            <h5 class="admin-h5">Quick Stats</h5>
+                        </div>
+                        <div class="quick-stats">
+                            <div class="quick-stat">
+                                <div class="quick-stat__label">Avg. Order Value</div>
+                                <div class="quick-stat__value">
+                                    @if (Model.Stats.TotalOrders > 0)
+                                    {
+                                        @((Model.Stats.TotalRevenue / Model.Stats.TotalOrders).ToString("C"))
+                                    }
+                                    else
+                                    {
+                                        <text>$0.00</text>
+                                    }
+                                </div>
+                            </div>
+                            <div class="quick-stat">
+                                <div class="quick-stat__label">Orders Today</div>
+                                <div class="quick-stat__value">@Model.RecentOrders.Count(o => o.Date.Date == DateTime.Today)</div>
+                            </div>
+                            <div class="quick-stat">
+                                <div class="quick-stat__label">New Customers</div>
+                                <div class="quick-stat__value">@Model.RecentUsers.Count</div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

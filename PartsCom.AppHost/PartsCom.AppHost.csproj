@@ -1,0 +1,22 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.0.0">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <UserSecretsId>70ffb45c-2123-45ec-9541-b7f71f0978f6</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\PartsCom.Infrastructure\PartsCom.Infrastructure.csproj" IsAspireProjectResource="false" />
+      <ProjectReference Include="..\PartsCom.Ui\PartsCom.Ui.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Aspire.Hosting.SqlServer" Version="13.0.0" />
+      <PackageReference Include="CommunityToolkit.Aspire.Hosting.Minio" Version="13.0.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.11">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+    </ItemGroup>
+
+</Project>

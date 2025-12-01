@@ -1,0 +1,39 @@
+@import url(./theme.css);
+
+.mid-nav ul {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.logo {
+  font-size: 1.5rem;
+}
+.logo h1 {
+  margin: 0;
+}
+
+.search-container {
+  background-color: var(--white);
+  border-radius: 2px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 1.2rem;
+  width: 100%;
+  max-width: 40rem;
+  max-height: 3rem;
+}
+
+.search-icon {
+  cursor: pointer;
+}
+
+.search-input {
+  all: unset;
+  color: var(--gray-500);
+}

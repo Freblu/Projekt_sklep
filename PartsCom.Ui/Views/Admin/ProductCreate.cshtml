@@ -1,0 +1,227 @@
+@model ProductManageViewModel
+@{
+    ViewData["Title"] = "Add New Product";
+}
+<link rel="stylesheet" href="~/css/dashboard/admin-dashboard.css" asp-append-version="true" />
+
+<div class="container-fluid p-0 admin-dashboard">
+    <div class="row">
+        <!-- ADMIN SIDEBAR -->
+        <aside class="col-12 col-lg-2">
+            <nav class="admin-aside">
+                <div class="admin-aside__header">
+                    <h4>Admin Panel</h4>
+                </div>
+                <a class="admin-aside__link" asp-controller="Admin" asp-action="Index">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    Dashboard
+                </a>
+                <a class="admin-aside__link admin-aside__link--active" asp-controller="Admin" asp-action="Products">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 7H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2Z"/>
+                        <path d="M9 20v-8h6v8"/>
+                        <path d="M3 7v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7"/>
+                    </svg>
+                    Products
+                </a>
+                <a class="admin-aside__link" asp-controller="Admin" asp-action="Orders">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 2L3 6v14c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2V6l-3-4H6z"/>
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <path d="M16 10a4 4 0 1 1-8 0"/>
+                    </svg>
+                    Orders
+                </a>
+                <a class="admin-aside__link" asp-controller="Admin" asp-action="Customers">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    Customers
+                </a>
+                <a class="admin-aside__link" asp-controller="Admin" asp-action="Settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 1v6m0 6v6"/>
+                        <path d="m4.2 4.2 4.2 4.2m7.2 7.2 4.2 4.2"/>
+                        <path d="M1 12h6m6 0h6"/>
+                        <path d="m4.2 19.8 4.2-4.2m7.2-7.2 4.2-4.2"/>
+                    </svg>
+                    Settings
+                </a>
+                <a class="admin-aside__link admin-aside__link--logout" asp-controller="Auth" asp-action="Logout">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    Logout
+                </a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="col-12 col-lg-10">
+            <header class="admin-header">
+                <div>
+                    <h3 class="admin-title">Add New Product</h3>
+                    <p class="admin-subtitle">Create a new product in your catalog</p>
+                </div>
+                <div class="admin-header__actions">
+                    <a asp-controller="Admin" asp-action="Products" class="admin-btn admin-btn--outline">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="19" y1="12" x2="5" y2="12"/>
+                            <polyline points="12 19 5 12 12 5"/>
+                        </svg>
+                        Back to Products
+                    </a>
+                </div>
+            </header>
+
+            <form method="post" asp-controller="Admin" asp-action="ProductCreate" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <div class="row g-3">
+                    <div class="col-12 col-lg-8">
+                        <section class="admin-card">
+                            <div class="admin-card__header">
+                                <h5 class="admin-h5">Product Information</h5>
+                            </div>
+                            <div class="admin-form">
+                                <div class="admin-form__group">
+                                    <label asp-for="Name" class="admin-label">Product Name *</label>
+                                    <input asp-for="Name" class="admin-input" placeholder="Enter product name" required />
+                                    <span asp-validation-for="Name" class="admin-error"></span>
+                                </div>
+
+                                <div class="admin-form__group">
+                                    <label asp-for="Description" class="admin-label">Description *</label>
+                                    <textarea asp-for="Description" class="admin-textarea" rows="5" placeholder="Enter product description" required></textarea>
+                                    <span asp-validation-for="Description" class="admin-error"></span>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-12 col-md-6">
+                                        <div class="admin-form__group">
+                                            <label asp-for="Price" class="admin-label">Price *</label>
+                                            <input asp-for="Price" type="number" step="0.01" class="admin-input" placeholder="0.00" required />
+                                            <span asp-validation-for="Price" class="admin-error"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="admin-form__group">
+                                            <label asp-for="Stock" class="admin-label">Stock Quantity *</label>
+                                            <input asp-for="Stock" type="number" class="admin-input" placeholder="0" required />
+                                            <span asp-validation-for="Stock" class="admin-error"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-12 col-md-6">
+                                        <div class="admin-form__group">
+                                            <label asp-for="Category" class="admin-label">Category *</label>
+                                            <select asp-for="Category" class="admin-select" required>
+                                                <option value="">Select category</option>
+                                                @foreach (var cat in Model.Categories)
+                                                {
+                                                    <option value="@cat">@cat</option>
+                                                }
+                                            </select>
+                                            <span asp-validation-for="Category" class="admin-error"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="admin-form__group">
+                                            <label asp-for="Brand" class="admin-label">Brand</label>
+                                            <input asp-for="Brand" class="admin-input" placeholder="Enter brand name" />
+                                            <span asp-validation-for="Brand" class="admin-error"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="col-12 col-lg-4">
+                        <section class="admin-card">
+                            <div class="admin-card__header">
+                                <h5 class="admin-h5">Product Image</h5>
+                            </div>
+                            <div class="admin-form">
+                                <div class="admin-form__group">
+                                    <label asp-for="ImageUrl" class="admin-label">Image URL</label>
+                                    <input asp-for="ImageUrl" class="admin-input" placeholder="https://example.com/image.jpg" />
+                                    <span asp-validation-for="ImageUrl" class="admin-error"></span>
+                                    <small class="admin-hint">Or upload an image below</small>
+                                </div>
+                                <div class="admin-form__group">
+                                    <label class="admin-label">Upload Image</label>
+                                    <input type="file" name="imageFile" class="admin-input" accept="image/*" />
+                                </div>
+                                <div class="image-preview">
+                                    <img id="imagePreview" src="https://via.placeholder.com/300x300?text=No+Image" alt="Preview" />
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="admin-card mt-3">
+                            <div class="admin-card__header">
+                                <h5 class="admin-h5">Product Status</h5>
+                            </div>
+                            <div class="admin-form">
+                                <div class="admin-form__group">
+                                    <label asp-for="Status" class="admin-label">Status *</label>
+                                    <select asp-for="Status" class="admin-select" required>
+                                        <option value="Active">Active</option>
+                                        <option value="Draft">Draft</option>
+                                        <option value="Inactive">Inactive</option>
+                                    </select>
+                                    <span asp-validation-for="Status" class="admin-error"></span>
+                                </div>
+                            </div>
+                        </section>
+
+                        <div class="admin-form__actions mt-3">
+                            <button type="submit" class="admin-btn admin-btn--primary w-100">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                                    <polyline points="17 21 17 13 7 13 7 21"/>
+                                    <polyline points="7 3 7 8 15 8"/>
+                                </svg>
+                                Create Product
+                            </button>
+                            <a asp-controller="Admin" asp-action="Products" class="admin-btn admin-btn--outline w-100 mt-2">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </main>
+    </div>
+</div>
+
+<script>
+    // Image preview
+    document.querySelector('input[name="imageFile"]')?.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('imagePreview').src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    document.querySelector('input[name="ImageUrl"]')?.addEventListener('input', function(e) {
+        if (e.target.value) {
+            document.getElementById('imagePreview').src = e.target.value;
+        }
+    });
+</script>

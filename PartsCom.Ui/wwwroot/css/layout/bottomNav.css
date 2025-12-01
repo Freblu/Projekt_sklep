@@ -1,0 +1,129 @@
+.bottom-nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  justify-self: center;
+  margin: 0 auto;
+}
+
+.bottom-nav-container ul {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  list-style-type: none;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+}
+
+.bottom-nav-container ul li {
+  display: flex;
+  color: var(--gray-600);
+  flex-direction: row-reverse;
+  margin: 0;
+  gap: 0.8rem;
+}
+
+.bottom-nav-container .categories-li {
+  background-color: var(--gray-50);
+  color: var(--gray-900);
+  cursor: pointer;
+  padding: 0.85rem 1.25rem;
+}
+
+.contact {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.contact p {
+  margin: 0;
+}
+
+/* === Mega dropdown "Kategorie" === */
+
+.bottom-nav .categories-li {
+  position: relative;
+}
+
+.mega-dropdown {
+  min-width: 560px;
+  border-radius: 12px;
+  border: 0;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
+}
+
+.mega-dropdown-inner {
+  align-items: flex-start;
+}
+
+/* Lewa kolumna – pionowe zakładki */
+.mega-nav {
+  min-width: 230px;
+  border-right: 1px solid #e5e7eb;
+  padding-right: 0.75rem;
+}
+
+.mega-nav .nav-link {
+  text-align: left;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0;
+  color: #191c1f;
+  font-size: 0.9rem;
+}
+
+.mega-nav .nav-link + .nav-link {
+  margin-top: 2px;
+}
+
+.mega-nav .nav-link:hover {
+  background-color: #f3f4f6;
+}
+
+.mega-nav .nav-link.active {
+  background-color: #e5f0ff;
+  color: #1b6392;
+  font-weight: 600;
+}
+
+/* Prawa kolumna – lista linków */
+.mega-tab-content {
+  min-width: 230px;
+}
+
+.mega-tab-content .dropdown-item {
+  border-radius: 6px;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.9rem;
+}
+
+.mega-tab-content .dropdown-item:hover {
+  background-color: #eff6ff;
+  color: #1b6392;
+}
+
+/* Trochę responsywności */
+@media (max-width: 991.98px) {
+  .mega-dropdown {
+    min-width: 100vw;
+    border-radius: 0;
+  }
+
+  .mega-dropdown-inner {
+    flex-direction: column;
+  }
+
+  .mega-nav {
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 0.75rem;
+    padding-right: 0;
+    width: 100%;
+  }
+
+  .mega-tab-content {
+    width: 100%;
+  }
+}

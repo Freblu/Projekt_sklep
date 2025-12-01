@@ -1,0 +1,238 @@
+@model AdminProductListViewModel
+@{
+    ViewData["Title"] = "Products Management";
+}
+<link rel="stylesheet" href="~/css/dashboard/admin-dashboard.css" asp-append-version="true" />
+
+<div class="container-fluid p-0 admin-dashboard">
+    <div class="row">
+        <!-- ADMIN SIDEBAR -->
+        <aside class="col-12 col-lg-2">
+            <nav class="admin-aside">
+                <div class="admin-aside__header">
+                    <h4>Admin Panel</h4>
+                </div>
+                <a class="admin-aside__link" asp-controller="Admin" asp-action="Index">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    Dashboard
+                </a>
+                <a class="admin-aside__link admin-aside__link--active" asp-controller="Admin" asp-action="Products">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 7H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2Z"/>
+                        <path d="M9 20v-8h6v8"/>
+                        <path d="M3 7v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7"/>
+                    </svg>
+                    Products
+                </a>
+                <a class="admin-aside__link" asp-controller="Admin" asp-action="Orders">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 2L3 6v14c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2V6l-3-4H6z"/>
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <path d="M16 10a4 4 0 1 1-8 0"/>
+                    </svg>
+                    Orders
+                </a>
+                <a class="admin-aside__link" asp-controller="Admin" asp-action="Customers">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    Customers
+                </a>
+                <a class="admin-aside__link" asp-controller="Admin" asp-action="Settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 1v6m0 6v6"/>
+                        <path d="m4.2 4.2 4.2 4.2m7.2 7.2 4.2 4.2"/>
+                        <path d="M1 12h6m6 0h6"/>
+                        <path d="m4.2 19.8 4.2-4.2m7.2-7.2 4.2-4.2"/>
+                    </svg>
+                    Settings
+                </a>
+                <a class="admin-aside__link admin-aside__link--logout" asp-controller="Auth" asp-action="Logout">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    Logout
+                </a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="col-12 col-lg-10">
+            <header class="admin-header">
+                <div>
+                    <h3 class="admin-title">Products Management</h3>
+                    <p class="admin-subtitle">Manage your product catalog</p>
+                </div>
+                <div class="admin-header__actions">
+                    <a asp-controller="Admin" asp-action="ProductCreate" class="admin-btn admin-btn--primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Add Product
+                    </a>
+                </div>
+            </header>
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert--success">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                    @TempData["Success"]
+                </div>
+            }
+
+            <!-- FILTERS -->
+            <section class="admin-card mb-3">
+                <form method="get" class="product-filters">
+                    <div class="product-filter">
+                        <input type="text" name="search" value="@Model.SearchQuery" placeholder="Search products..." class="admin-input" />
+                    </div>
+                    <div class="product-filter">
+                        <select name="category" class="admin-select">
+                            <option value="">All Categories</option>
+                            <option value="Laptops" selected="@(Model.CategoryFilter == "Laptops")">Laptops</option>
+                            <option value="Accessories" selected="@(Model.CategoryFilter == "Accessories")">Accessories</option>
+                            <option value="Monitors" selected="@(Model.CategoryFilter == "Monitors")">Monitors</option>
+                            <option value="Components" selected="@(Model.CategoryFilter == "Components")">Components</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="admin-btn admin-btn--primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                        Search
+                    </button>
+                </form>
+            </section>
+
+            <!-- PRODUCTS TABLE -->
+            <section class="admin-card">
+                <div class="admin-card__header">
+                    <h5 class="admin-h5">All Products (@Model.TotalCount)</h5>
+                </div>
+
+                <div class="admin-table">
+                    <div class="admin-table__row admin-table__row--head">
+                        <div>Product</div>
+                        <div>Category</div>
+                        <div>Price</div>
+                        <div>Stock</div>
+                        <div>Status</div>
+                        <div>Created</div>
+                        <div class="admin-ta-right">Actions</div>
+                    </div>
+
+                    @foreach (var p in Model.Products)
+                    {
+                        <div class="admin-table__row">
+                            <div class="admin-table__product">
+                                <img src="@p.ImageUrl" alt="@p.Name" class="admin-table__img" />
+                                <div>
+                                    <div class="admin-table__product-name">@p.Name</div>
+                                    <div class="admin-table__product-id">ID: @p.Id</div>
+                                </div>
+                            </div>
+                            <div>@p.Category</div>
+                            <div class="admin-fw">@p.Price.ToString("C")</div>
+                            <div>
+                                @{
+                                    string stockBadgeClass;
+                                    if (p.Stock == 0)
+                                    {
+                                        stockBadgeClass = "stock-badge--out";
+                                    }
+                                    else if (p.Stock < 10)
+                                    {
+                                        stockBadgeClass = "stock-badge--low";
+                                    }
+                                    else
+                                    {
+                                        stockBadgeClass = "stock-badge--ok";
+                                    }
+                                }
+                                <span class="stock-badge @stockBadgeClass">
+                                    @p.Stock units
+                                </span>
+                            </div>
+                            <div>
+                                @{
+                                    string statusBadgeClass;
+                                    if (p.Status == "Active")
+                                    {
+                                        statusBadgeClass = "status-badge--active";
+                                    }
+                                    else if (p.Status == "Low Stock")
+                                    {
+                                        statusBadgeClass = "status-badge--warning";
+                                    }
+                                    else
+                                    {
+                                        statusBadgeClass = "status-badge--danger";
+                                    }
+                                }
+                                <span class="status-badge @statusBadgeClass">
+                                    @p.Status
+                                </span>
+                            </div>
+                            <div>@p.CreatedAt.ToString("MMM dd, yyyy")</div>
+                            <div class="admin-ta-right">
+                                <div class="admin-actions">
+                                    <a asp-controller="Admin" asp-action="ProductEdit" asp-route-id="@p.Id" class="admin-action" title="Edit">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                        </svg>
+                                    </a>
+                                    <form method="post" asp-controller="Admin" asp-action="ProductDelete" asp-route-id="@p.Id" style="display:inline;">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="admin-action admin-action--danger" title="Delete" onclick="return confirm('Are you sure you want to delete this product?');">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <polyline points="3 6 5 6 21 6"/>
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                                <line x1="10" y1="11" x2="10" y2="17"/>
+                                                <line x1="14" y1="11" x2="14" y2="17"/>
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- PAGINATION -->
+                <div class="admin-pagination">
+                    <div class="admin-pagination__info">
+                        Showing @((Model.PageNumber - 1) * Model.PageSize + 1) to @(Math.Min(Model.PageNumber * Model.PageSize, Model.TotalCount)) of @Model.TotalCount products
+                    </div>
+                    <div class="admin-pagination__buttons">
+                        @if (Model.PageNumber > 1)
+                        {
+                            <a asp-controller="Admin" asp-action="Products" asp-route-page="@(Model.PageNumber - 1)" asp-route-search="@Model.SearchQuery" asp-route-category="@Model.CategoryFilter" class="admin-btn admin-btn--outline">Previous</a>
+                        }
+                        @if (Model.PageNumber * Model.PageSize < Model.TotalCount)
+                        {
+                            <a asp-controller="Admin" asp-action="Products" asp-route-page="@(Model.PageNumber + 1)" asp-route-search="@Model.SearchQuery" asp-route-category="@Model.CategoryFilter" class="admin-btn admin-btn--outline">Next</a>
+                        }
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</div>

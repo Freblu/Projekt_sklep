@@ -1,0 +1,61 @@
+@import url(./theme.css);
+@import url(./layout/header.css);
+@import url(./layout/topNav.css);
+@import url(./layout/midNav.css);
+@import url(./layout/bottomNav.css);
+@import url(./account/login.css);
+@import url(./account/register.css);
+@import url(./dashboard/dashboard.css);
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body,
+html {
+  font-size: var(--font-size-default);
+  font-family: var(--font-family-default);
+  color: var(--white);
+  margin: 0;
+  padding: 0;
+}
+
+.cart-icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-item-count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0px;
+  bottom: 3px;
+  left: 18px;
+  background-color: var(--white);
+  border-radius: 50%;
+  color: var(--secondary-700);
+  text-align: center;
+  height: 20px;
+  width: 20px;
+}
+
+nav li {
+  margin: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body a {
+  color: var(--text-dark);
+  text-decoration: none;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}

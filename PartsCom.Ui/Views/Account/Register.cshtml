@@ -1,0 +1,159 @@
+@model PartsCom.Ui.Models.RegisterViewModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Sign Up";
+    var passwordInputId = Html.IdFor(m => m.Password);
+    var confirmPasswordInputId = Html.IdFor(m => m.ConfirmPassword);
+    var returnUrl = ViewData["ReturnUrl"] as string ?? string.Empty;
+}
+
+<link rel="stylesheet" href="~/css/theme.css" />
+<link rel="stylesheet" href="~/css/register.css" />
+
+<div class="auth-card">
+  <div class="auth-card__tabs">
+    <button class="auth-card__tab">
+      <a asp-action="Login" asp-controller="Account">Zaloguj</a>
+    </button>
+    <button class="auth-card__tab auth-card__tab--active">
+      <a asp-action="Register" asp-controller="Account">Zarejestruj</a>
+    </button>
+  </div>
+
+  <div class="auth-card__underline">
+    <div class="auth-card__underline-active auth-card__underline-active--right"></div>
+  </div>
+
+  <form class="auth-form" asp-action="Register" asp-controller="Account" asp-route-returnUrl="@returnUrl" method="post">
+    @Html.AntiForgeryToken()
+
+    <div asp-validation-summary="ModelOnly" class="auth-form__validation"></div>
+
+    <input type="hidden" name="returnUrl" value="@returnUrl" />
+
+    <div class="auth-form__field-group">
+      <label asp-for="FirstName" class="auth-form__label"></label>
+      <input asp-for="FirstName" class="auth-form__input" autocomplete="given-name" />
+      <span asp-validation-for="FirstName" class="auth-form__validation-message"></span>
+    </div>
+
+    <div class="auth-form__field-group">
+      <label asp-for="LastName" class="auth-form__label"></label>
+      <input asp-for="LastName" class="auth-form__input" autocomplete="family-name" />
+      <span asp-validation-for="LastName" class="auth-form__validation-message"></span>
+    </div>
+
+    <div class="auth-form__field-group">
+      <label asp-for="Email" class="auth-form__label"></label>
+      <input asp-for="Email" class="auth-form__input" autocomplete="email" />
+      <span asp-validation-for="Email" class="auth-form__validation-message"></span>
+    </div>
+
+    <div class="auth-form__field-group">
+      <label asp-for="Password" class="auth-form__label"></label>
+
+      <div class="auth-form__password-wrapper">
+        <input asp-for="Password" class="auth-form__input auth-form__input--password" autocomplete="new-password" placeholder="8+ characters" />
+        <button class="auth-form__reveal-btn" type="button" aria-label="Show password" data-target="@passwordInputId">
+          <svg
+            class="auth-form__reveal-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="M12 5C7 5 2.73 8.11 1 12c1.73 3.89 6 7 11 7s9.27-3.11 11-7c-1.73-3.89-6-7-11-7Zm0 11a4 4 0 1 1 0-8a4 4 0 0 1 0 8Zm0-2a2 2 0 1 0 0-4a2 2 0 0 0 0 4Z"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
+      <span asp-validation-for="Password" class="auth-form__validation-message"></span>
+    </div>
+
+    <div class="auth-form__field-group">
+      <label asp-for="ConfirmPassword" class="auth-form__label"></label>
+
+      <div class="auth-form__password-wrapper">
+        <input asp-for="ConfirmPassword" class="auth-form__input auth-form__input--password" autocomplete="new-password" />
+        <button class="auth-form__reveal-btn" type="button" aria-label="Show password" data-target="@confirmPasswordInputId">
+          <svg
+            class="auth-form__reveal-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="M12 5C7 5 2.73 8.11 1 12c1.73 3.89 6 7 11 7s9.27-3.11 11-7c-1.73-3.89-6-7-11-7Zm0 11a4 4 0 1 1 0-8a4 4 0 0 1 0 8Zm0-2a2 2 0 1 0 0-4a2 2 0 0 0 0 4Z"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
+      <span asp-validation-for="ConfirmPassword" class="auth-form__validation-message"></span>
+    </div>
+
+    <div class="auth-form__terms-row">
+      <label class="auth-form__checkbox-wrapper">
+        <input type="checkbox" class="auth-form__checkbox-input" id="Input_Agree" required />
+        <span class="auth-form__checkbox-custom"></span>
+      </label>
+
+      <p class="auth-form__terms-text">
+        Are you agree to Clicon
+        <a class="auth-form__link" href="/legal/terms">Terms of Condition</a>
+        and
+        <a class="auth-form__link" href="/legal/privacy">Privacy Policy</a>.
+      </p>
+    </div>
+
+    <button class="auth-form__submit-btn" type="submit">
+      <span>SIGN UP</span>
+      <span class="auth-form__submit-icon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M5 12h14M13 6l6 6-6 6"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </span>
+    </button>
+  </form>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".auth-form__reveal-btn").forEach(function (btn) {
+      const targetId = btn.getAttribute("data-target");
+      const input = targetId ? document.getElementById(targetId) : null;
+
+      if (!input) {
+        return;
+      }
+
+      btn.addEventListener("click", function () {
+        const isPassword = input.getAttribute("type") === "password";
+        input.setAttribute("type", isPassword ? "text" : "password");
+      });
+    });
+  });
+</script>

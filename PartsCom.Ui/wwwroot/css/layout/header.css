@@ -1,0 +1,10 @@
+@import url(./theme.css);
+
+header {
+  background-color: var(--secondary-700);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--white);
+}

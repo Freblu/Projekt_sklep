@@ -1,0 +1,113 @@
+@model PartsCom.Ui.Models.LoginViewModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Sign In";
+    var passwordInputId = Html.IdFor(m => m.Password);
+    var rememberMeId = Html.IdFor(m => m.RememberMe);
+    var returnUrl = ViewData["ReturnUrl"] as string ?? string.Empty;
+}
+
+<link rel="stylesheet" href="~/css/login.css" />
+
+<div class="auth-card">
+  <div class="auth-card__tabs">
+    <button class="auth-card__tab auth-card__tab--active">
+      <a asp-action="Login" asp-controller="Account">Zaloguj</a>
+    </button>
+    <button class="auth-card__tab">
+      <a asp-action="Register" asp-controller="Account">Zarejestruj</a>
+    </button>
+  </div>
+
+  <div class="auth-card__underline">
+    <div class="auth-card__underline-active"></div>
+  </div>
+
+  <form class="auth-form" asp-action="Login" asp-controller="Account" asp-route-returnUrl="@returnUrl" method="post">
+    @Html.AntiForgeryToken()
+
+    <div asp-validation-summary="ModelOnly" class="auth-form__validation"></div>
+
+    <input type="hidden" name="returnUrl" value="@returnUrl" />
+
+    <div class="auth-form__field-group">
+      <label asp-for="Email" class="auth-form__label"></label>
+      <input asp-for="Email" class="auth-form__input" autocomplete="email" />
+      <span asp-validation-for="Email" class="auth-form__validation-message"></span>
+    </div>
+
+    <div class="auth-form__field-group">
+      <div class="auth-form__label-row">
+        <label asp-for="Password" class="auth-form__label"></label>
+        <a class="auth-form__forgot" asp-action="ForgotPassword" asp-controller="Account">Forget Password</a>
+      </div>
+
+      <div class="auth-form__password-wrapper">
+        <input asp-for="Password" class="auth-form__input auth-form__input--password" autocomplete="current-password" />
+        <button class="auth-form__reveal-btn" type="button" aria-label="Show password">
+          <svg
+            class="auth-form__reveal-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="M12 5C7 5 2.73 8.11 1 12c1.73 3.89 6 7 11 7s9.27-3.11 11-7c-1.73-3.89-6-7-11-7Zm0 11a4 4 0 1 1 0-8a4 4 0 0 1 0 8Zm0-2a2 2 0 1 0 0-4a2 2 0 0 0 0 4Z"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
+      <span asp-validation-for="Password" class="auth-form__validation-message"></span>
+    </div>
+
+    <div class="auth-form__field-group auth-form__field-group--inline">
+      <label class="auth-form__checkbox-wrapper" for="@rememberMeId">
+        <input asp-for="RememberMe" class="auth-form__checkbox-input" />
+        <span class="auth-form__checkbox-custom"></span>
+        <span class="auth-form__checkbox-label">Zapamiętaj mnie</span>
+      </label>
+      <span asp-validation-for="RememberMe" class="auth-form__validation-message"></span>
+    </div>
+
+    <button class="auth-form__submit-btn" type="submit">
+      <span>SIGN IN</span>
+      <span class="auth-form__submit-icon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M5 12h14M13 6l6 6-6 6"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </span>
+    </button>
+  </form>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const toggleBtn = document.querySelector(".auth-form__reveal-btn");
+      const pwdInput = document.getElementById("@passwordInputId");
+
+      if (toggleBtn && pwdInput) {
+        toggleBtn.addEventListener("click", function () {
+          const isPassword = pwdInput.getAttribute("type") === "password";
+          pwdInput.setAttribute("type", isPassword ? "text" : "password");
+        });
+      }
+    });
+  </script>
+</div>

@@ -1,0 +1,73 @@
+﻿@model List<ProductListItemViewModel>
+
+<div class="container py-4">
+
+    <h2 class="mb-4">Produkty</h2>
+
+    <!-- Wyszukiwarka + filtry -->
+    <form method="get" class="row g-3 mb-4">
+
+        <div class="col-md-4">
+            <input name="search" class="form-control" placeholder="Szukaj produktu..." value="@Context.Request.Query["search"]" />
+        </div>
+
+        <div class="col-md-3">
+            <select name="category" class="form-select">
+                <option value="">Wszystkie kategorie</option>
+                <option value="Elektronika">Elektronika</option>
+                <option value="Akcesoria">Akcesoria</option>
+                <option value="Części">Części</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <input type="number" name="minPrice" class="form-control" placeholder="Min cena" />
+        </div>
+
+        <div class="col-md-2">
+            <input type="number" name="maxPrice" class="form-control" placeholder="Max cena" />
+        </div>
+
+        <div class="col-md-3">
+            <select name="sort" class="form-select">
+                <option value="">Sortuj</option>
+                <option value="price_asc">Cena rosnąco</option>
+                <option value="price_desc">Cena malejąco</option>
+                <option value="name">Nazwa</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <button class="btn btn-dark w-100">Filtruj</button>
+        </div>
+
+    </form>
+
+    <div class="row g-4">
+        @foreach (var p in Model)
+        {
+            <div class="col-md-3">
+                <div class="card h-100 shadow-sm">
+
+                    <img src="@p.ImageUrl" alt="@p.Name" class="card-img-top" style="height: 180px; object-fit: cover;" />
+
+                    <div class="card-body">
+                        <h6 class="fw-bold">@p.Name</h6>
+                        <p class="text-muted mb-2">@p.Price zł</p>
+
+                        <div class="mb-2">
+                            @foreach (var tag in p.Tags)
+                            {
+                                <span class="badge bg-warning text-dark me-1">@tag</span>
+                            }
+                        </div>
+
+                        <a class="btn btn-outline-dark w-100">Kup</a>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+
+</div>

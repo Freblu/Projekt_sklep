@@ -1,0 +1,300 @@
+﻿@model List<CartItemViewModel>
+
+<div class="cart-container">
+
+    <!-- lewa -->
+    <div class="cart-table">
+
+        <div class="cart-header">
+            <div class="col-product">Products</div>
+            <div class="col-price">Price</div>
+            <div class="col-qty">Quantity</div>
+            <div class="col-subtotal">Sub-total</div>
+            <div class="col-remove"></div>
+        </div>
+
+        @foreach (var item in Model)
+        {
+            <div class="cart-row cart-item"
+                 data-price="@item.Price"
+                 data-qty="@item.Quantity">
+
+                <!-- Produkt -->
+                <div class="col-product product-info">
+                    <img src="@item.ImageUrl" class="p-img" alt="@item.Name">
+                    <div class="p-text">
+                        <div class="p-name">@item.Name</div>
+                    </div>
+                </div>
+
+                <!-- Cena -->
+                <div class="col-price">
+                    @item.Price zł
+                </div>
+
+                <!-- Ilość -->
+                <div class="col-qty">
+                    <button class="qty-btn minus">–</button>
+                    <span class="qty-number">@item.Quantity</span>
+                    <button class="qty-btn plus">+</button>
+                </div>
+
+                <!-- Subtotal -->
+                <div class="col-subtotal">
+                    <span class="row-subtotal">@((item.Price * item.Quantity).ToString("0.00")) zł</span>
+                </div>
+
+                <!-- Usuń -->
+                <div class="col-remove">
+                    <button class="delete-btn">×</button>
+                </div>
+
+            </div>
+        }
+    </div>
+
+
+    <!-- prawa-->
+    <div class="cart-summary">
+
+        <h3>Podsumowanie</h3>
+
+        @{
+            var subtotal = Model.Sum(x => x.Price * x.Quantity);
+            var discount = 0;
+            var shipping = 0;
+            var tax = 0.23m * subtotal;
+            var total = subtotal - discount + shipping + tax;
+        }
+
+        <div class="summary-row">
+            <span>Sub-total:</span>
+            <span id="subtotal">@subtotal zł</span>
+        </div>
+
+        <div class="summary-row">
+            <span>Shipping:</span>
+            <span id="shipping">@(shipping == 0 ? "Free" : shipping + " zł")</span>
+        </div>
+
+        <div class="summary-row">
+            <span>Discount:</span>
+            <span id="discount">-@discount zł</span>
+        </div>
+
+        <div class="summary-row">
+            <span>Tax:</span>
+            <span id="tax">@tax.ToString("0.00") zł</span>
+        </div>
+
+        <div class="summary-total">
+            <span>Total:</span>
+            <span id="total">@total.ToString("0.00") zł</span>
+        </div>
+
+        <button class="checkout-btn">Przejdź do płatności</button>
+
+    </div>
+
+</div>
+
+<script>
+    // Funkcja podsumowanie
+    function recalc() {
+        let items = document.querySelectorAll(".cart-item");
+        let subtotal = 0;
+
+        items.forEach(item => {
+            let price = parseFloat(item.dataset.price);
+            let qty = parseInt(item.dataset.qty);
+            subtotal += price * qty;
+        });
+
+        let discount = 0;
+        let tax = subtotal * 0.23;
+        let shipping = 0;
+        let total = subtotal - discount + tax + shipping;
+
+        document.getElementById("subtotal").textContent = subtotal.toFixed(2) + " zł";
+        document.getElementById("tax").textContent = tax.toFixed(2) + " zł";
+        document.getElementById("total").textContent = total.toFixed(2) + " zł";
+    }
+
+    recalc();
+
+    // Obsługa + i −
+    document.querySelectorAll(".cart-item").forEach(item => {
+        let minus = item.querySelector(".minus");
+        let plus = item.querySelector(".plus");
+        let qtyDisplay = item.querySelector(".qty-number");
+
+        minus.addEventListener("click", () => {
+            let qty = parseInt(item.dataset.qty);
+            if (qty > 1) {
+                qty--;
+                item.dataset.qty = qty;
+                qtyDisplay.textContent = qty;
+                recalc();
+            }
+        });
+
+        plus.addEventListener("click", () => {
+            let qty = parseInt(item.dataset.qty);
+            qty++;
+            item.dataset.qty = qty;
+            qtyDisplay.textContent = qty;
+            recalc();
+        });
+    });
+
+    // Usuwanie produktu
+    document.querySelectorAll(".delete-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            let item = btn.closest(".cart-item");
+            item.remove();
+            recalc();
+        });
+    });
+</script>
+
+<style>
+    .cart-container {
+        display: grid;
+        grid-template-columns: 65% 35%;
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 25px;
+        color: white;
+    }
+
+    cart-table {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .cart-header,
+    .cart-row {
+        display: grid;
+        grid-template-columns: 45% 15% 20% 15% 5%;
+        padding: 15px 20px;
+        align-items: center;
+    }
+
+    .cart-header {
+        background: #ffffff;
+        color: #888;
+        font-weight: bold;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+
+    .cart-row {
+        background: #fefefe;
+        border-radius: 8px;
+        color: white;
+        border-radius: 8px;
+        border: 1px solid rgba(222,222,222,0.45);
+    }
+
+    .product-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: black;
+    }
+
+    .p-img {
+        width: 70px;
+        height: 70px;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+
+    .p-name {
+        font-size: 17px;
+        font-weight: 500;
+    }
+
+    .col-price,
+    .col-subtotal {
+        font-size: 16px;
+        color: black;
+    }
+
+    .col-qty {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .qty-btn {
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: #333;
+        color: white;
+        font-size: 18px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+        .qty-btn:hover {
+            background: #444;
+        }
+
+    .delete-btn {
+        background: none;
+        border: none;
+        color: #ff4d4d;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+        .delete-btn:hover {
+            color: #ff6666;
+        }
+    /* SUMMARY */
+    .cart-summary {
+        background: #fff;
+        color: #222;
+        padding: 20px;
+        border-radius: 12px;
+        height: fit-content;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+        font-size: 16px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .summary-total {
+        margin-top: 15px;
+        font-size: 20px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .checkout-btn {
+        width: 100%;
+        background: #ff7a2f;
+        border: none;
+        color: white;
+        padding: 14px;
+        margin-top: 20px;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+        .checkout-btn:hover {
+            background: #ff8f4f;
+        }
+
+</style>

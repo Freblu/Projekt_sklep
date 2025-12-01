@@ -1,0 +1,100 @@
+@model PartsCom.Application.Queries.GetAllProductCategories.GetAllProductCategoriesQueryResponse
+
+<li class="categories-li dropdown">
+  <a
+    class="d-flex align-items-center dropdown-toggle text-decoration-none"
+    href="#"
+    id="categoriesDropdownToggle"
+    role="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+  >
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      class="me-2"
+    >
+      <path
+        d="M13 6L8 11L3 6"
+        stroke="#191C1F"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+    Kategorie
+  </a>
+
+  <!-- Mega dropdown -->
+  <div
+    class="dropdown-menu mega-dropdown p-3"
+    aria-labelledby="categoriesDropdownToggle"
+  >
+    <div class="d-flex mega-dropdown-inner">
+      <!-- LEWA KOLUMNA – kategorie -->
+      <div
+        class="nav flex-column nav-pills mega-nav"
+        id="v-pills-tab"
+        role="tablist"
+        aria-orientation="vertical"
+      >
+        @foreach (var category in Model.ProductCategories)
+        {
+          var isFirst = category == Model.ProductCategories.First();
+          var tabId = $"v-pills-{category.Id}";
+          var buttonId = $"v-pills-{category.Id}-tab";
+          
+          <button
+            class="nav-link @(isFirst ? "active" : "")"
+            id="@buttonId"
+            data-bs-toggle="pill"
+            data-bs-target="#@tabId"
+            type="button"
+            role="tab"
+            aria-controls="@tabId"
+            aria-selected="@(isFirst ? "true" : "false")"
+          >
+            @category.Name
+          </button>
+        }
+      </div>
+
+      <!-- PRAWA KOLUMNA – zawartość dla danej kategorii -->
+      <div
+        class="tab-content mega-tab-content ms-3"
+        id="v-pills-tabContent"
+      >
+        @foreach (var category in Model.ProductCategories)
+        {
+          var isFirst = category == Model.ProductCategories.First();
+          var tabId = $"v-pills-{category.Id}";
+          var buttonId = $"v-pills-{category.Id}-tab";
+          
+          <div
+            class="tab-pane fade @(isFirst ? "show active" : "")"
+            id="@tabId"
+            role="tabpanel"
+            aria-labelledby="@buttonId"
+          >
+            <ul class="list-unstyled mb-0">
+              @if (category.Subcategories.Any())
+              {
+                @foreach (var subcategory in category.Subcategories)
+                {
+                  <li><a class="dropdown-item" href="#">@subcategory.Name</a></li>
+                }
+              }
+              else
+              {
+                <li><a class="dropdown-item" href="#">Brak podkategorii</a></li>
+              }
+            </ul>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</li>
