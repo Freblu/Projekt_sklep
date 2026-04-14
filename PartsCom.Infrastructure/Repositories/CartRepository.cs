@@ -1,6 +1,6 @@
-using PartsCom.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using PartsCom.Application.Interfaces;
+using PartsCom.Domain.Entities;
 using PartsCom.Infrastructure.Database;
 
 namespace PartsCom.Infrastructure.Repositories;
@@ -13,6 +13,13 @@ internal sealed class CartRepository(PartsComDbContext dbContext) : ICartReposit
     }
 
     public async Task<Cart?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        return await dbContext.Carts
+            .Include(c => c.Items)
+            .FirstOrDefaultAsync(c => c.UserId == userId, cancellationToken);
+    }
+
+    public async Task<Cart?> GetByUserIdWithProductsAsync(Guid userId, CancellationToken cancellationToken = default)
     {
         return await dbContext.Carts
             .Include(c => c.Items)

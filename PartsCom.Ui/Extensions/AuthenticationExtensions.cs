@@ -1,6 +1,6 @@
+using System.Globalization;
 using ErrorOr;
 using MediatR;
-using System.Globalization;
 using PartsCom.Application.Commands.LoginUser;
 using PartsCom.Application.Commands.LogoutUser;
 using PartsCom.Application.Commands.RefreshToken;
@@ -14,7 +14,7 @@ internal static class AuthenticationExtensions
     private const string AccessTokenKey = "AccessToken";
     private const string RefreshTokenKey = "RefreshToken";
     private const string RefreshTokenExpirationKey = "RefreshTokenExpiration";
-    
+
     public static async Task<ErrorOr<LoginUserCommandResponse>> LoginAsync(
         this HttpContext context,
         string email,
@@ -34,16 +34,16 @@ internal static class AuthenticationExtensions
 
         return result;
     }
-    
+
     public static async Task<ErrorOr<Unit>> LogoutAsync(this HttpContext context, ISender sender)
     {
         string? token = context.GetAccessToken();
-        
+
         if (token is not null)
         {
             var command = new LogoutUserCommand(token);
             ErrorOr<Unit> result = await sender.Send(command);
-            
+
             if (!result.IsError)
             {
                 context.ClearAuthenticationTokens();
@@ -55,7 +55,7 @@ internal static class AuthenticationExtensions
         context.ClearAuthenticationTokens();
         return Unit.Value;
     }
-    
+
     public static async Task<ErrorOr<string>> RefreshTokenAsync(this HttpContext context, ISender sender)
     {
         string? refreshToken = context.GetRefreshToken();
@@ -78,7 +78,7 @@ internal static class AuthenticationExtensions
 
         return result;
     }
-    
+
     public static async Task<ErrorOr<Unit>> ValidateTokenAsync(this HttpContext context, ISender sender)
     {
         string? token = context.GetAccessToken();
@@ -91,7 +91,7 @@ internal static class AuthenticationExtensions
         var query = new ValidateTokenQuery(token);
         return await sender.Send(query);
     }
-    
+
     public static async Task<bool> IsAuthenticatedAsync(this HttpContext context, ISender sender)
     {
         ErrorOr<Unit> result = await context.ValidateTokenAsync(sender);
@@ -179,7 +179,7 @@ internal static class AuthenticationExtensions
 
         return null;
     }
-    
+
     public static bool IsRefreshTokenExpired(this HttpContext context)
     {
         DateTime? expiration = context.GetRefreshTokenExpiration();

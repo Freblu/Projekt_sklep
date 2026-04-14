@@ -1,10 +1,10 @@
 using ErrorOr;
 using MediatR;
-using PartsCom.Ui.Models;
 using Microsoft.AspNetCore.Mvc;
 using PartsCom.Application.Commands.LoginUser;
 using PartsCom.Application.Commands.RegisterUser;
 using PartsCom.Ui.Extensions;
+using PartsCom.Ui.Models;
 
 namespace PartsCom.Ui.Controllers;
 
@@ -79,6 +79,25 @@ public sealed class AccountController(ISender sender) : Controller
         await HttpContext.LogoutAsync(sender);
         TempData["Message"] = "Wylogowano pomyślnie.";
         return RedirectToAction("Index", "Home");
+    }
+
+    [HttpGet]
+    public IActionResult Edit()
+    {
+        return RedirectToAction("Index", "Settings");
+    }
+
+    [HttpGet]
+    public IActionResult Details()
+    {
+        return RedirectToAction("Index", "Settings");
+    }
+
+    [HttpGet]
+    public IActionResult Security()
+    {
+        // Password change functionality will be implemented in future iteration
+        return RedirectToAction("Index", "Settings");
     }
 
     private IActionResult RedirectToLocal(string? returnUrl)

@@ -1,0 +1,279 @@
+/* Footer Styles */
+.site-footer {
+  background: #191c1f;
+  color: #fff;
+  padding: 60px 0 0;
+  margin-top: 20px;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.footer-main {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr 1fr 1.2fr;
+  gap: 40px;
+  padding-bottom: 40px;
+}
+
+/* Footer Logo Section */
+.footer-logo-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  margin-bottom: 8px;
+}
+
+.footer-logo-icon {
+  width: 32px;
+  height: 32px;
+  background: #fa8232;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-logo-icon svg {
+  width: 18px;
+  height: 18px;
+  color: #fff;
+}
+
+.footer-logo-text {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.footer-support-label {
+  font-size: 14px;
+  color: #77878f;
+}
+
+.footer-phone {
+  font-size: 18px;
+  font-weight: 500;
+  color: #fff;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.footer-phone:hover {
+  color: #fa8232;
+}
+
+.footer-address {
+  font-size: 14px;
+  color: #adb7bc;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.footer-email {
+  font-size: 14px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.footer-email:hover {
+  color: #fa8232;
+}
+
+/* Footer Links Columns */
+.footer-column h4 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+  margin: 0 0 20px 0;
+  text-transform: uppercase;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 12px;
+}
+
+.footer-links a {
+  font-size: 14px;
+  color: #929fa5;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: #fa8232;
+}
+
+.footer-links .highlight {
+  color: #ebc80c;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.footer-links .highlight:hover {
+  color: #f5d61a;
+}
+
+/* App Download Section */
+.footer-app-section h4 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+  margin: 0 0 20px 0;
+  text-transform: uppercase;
+}
+
+.app-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.app-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: #303639;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.app-button:hover {
+  background: #3d4448;
+}
+
+.app-button svg {
+  width: 24px;
+  height: 24px;
+  color: #fff;
+}
+
+.app-button-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-button-text small {
+  font-size: 11px;
+  color: #929fa5;
+}
+
+.app-button-text span {
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+}
+
+/* Popular Tags Section */
+.footer-tags-section h4 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+  margin: 0 0 20px 0;
+  text-transform: uppercase;
+}
+
+.footer-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.footer-tag {
+  padding: 6px 12px;
+  border: 1px solid #3d4448;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #929fa5;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.footer-tag:hover {
+  border-color: #fa8232;
+  color: #fa8232;
+}
+
+.footer-tag.active {
+  border-color: #fa8232;
+  background: transparent;
+  color: #fff;
+}
+
+/* Footer Bottom */
+.footer-bottom {
+  border-top: 1px solid #303639;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.footer-bottom p {
+  font-size: 14px;
+  color: #929fa5;
+  margin: 0;
+}
+
+.footer-bottom a {
+  color: #fa8232;
+  text-decoration: none;
+}
+
+.footer-bottom a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .footer-main {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .footer-tags-section {
+    grid-column: span 3;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-main {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-logo-section {
+    grid-column: span 2;
+  }
+
+  .footer-tags-section {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-main {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-logo-section,
+  .footer-tags-section {
+    grid-column: span 1;
+  }
+}

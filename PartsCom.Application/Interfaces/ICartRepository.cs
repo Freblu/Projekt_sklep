@@ -8,6 +8,8 @@ public interface ICartRepository
 
     Task<Cart?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
 
+    Task<Cart?> GetByUserIdWithProductsAsync(Guid userId, CancellationToken cancellationToken = default);
+
     Task<Cart?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
     void Update(Cart cart);

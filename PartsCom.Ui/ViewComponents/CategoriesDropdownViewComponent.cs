@@ -11,12 +11,12 @@ public sealed class CategoriesDropdownViewComponent(ISender sender) : ViewCompon
     public async Task<IViewComponentResult> InvokeAsync()
     {
         ErrorOr<GetAllProductCategoriesQueryResponse> result = await sender.Send(new GetAllProductCategoriesQuery());
-        
+
         if (result.IsError)
         {
             return View(new GetAllProductCategoriesQueryResponse([]));
         }
-        
+
         return View(result.Value);
     }
 }

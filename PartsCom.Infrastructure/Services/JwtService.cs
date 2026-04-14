@@ -1,14 +1,14 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using ErrorOr;
 using MediatR;
-using System.Text;
-using System.Security.Claims;
-using PartsCom.Domain.Errors;
-using PartsCom.Domain.Entities;
-using System.Security.Cryptography;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using PartsCom.Application.Interfaces;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.Extensions.Configuration;
+using PartsCom.Domain.Entities;
+using PartsCom.Domain.Errors;
 
 namespace PartsCom.Infrastructure.Services;
 
@@ -17,55 +17,55 @@ internal sealed class JwtService(IConfiguration configuration, IDateTimeProvider
     private readonly string _issuer = configuration.GetValue<string>("JwtSettings:Issuer") ?? string.Empty;
     private readonly string _audience = configuration.GetValue<string>("JwtSettings:Audience") ?? string.Empty;
     private readonly string _key = configuration.GetValue<string>("JwtSettings:Key") ?? string.Empty;
-    
+
     public ErrorOr<string> GenerateToken(User user)
     {
-        List<Claim> claims = 
+        List<Claim> claims =
         [
             new(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new(ClaimTypes.Name, user.FirstName),
             new(ClaimTypes.Surname, user.LastName),
             new(ClaimTypes.Email, user.Email)
         ];
-        
+
         if (string.IsNullOrEmpty(_issuer))
         {
             return Errors.JwtServiceInvalidIssuer;
         }
-        
+
         if (string.IsNullOrEmpty(_audience))
         {
             return Errors.JwtServiceInvalidAudience;
         }
-        
+
         if (string.IsNullOrEmpty(_key))
         {
             return Errors.JwtServiceInvalidSigningKey;
         }
-        
+
         DateTime expires = DateTime.UtcNow.AddSeconds(configuration.GetValue<int>("JwtSettings:ExpiryInSeconds"));
-        
+
         var singingCredentials = new SigningCredentials(
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_key)),
             SecurityAlgorithms.HmacSha256);
-        
+
         var tokenDescriptor = new JwtSecurityToken(
             _issuer,
             _audience,
             claims,
             expires: expires,
             signingCredentials: singingCredentials);
-        
+
         return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
     }
 
     public string GenerateRefreshToken()
     {
         Span<byte> randomNumber = stackalloc byte[32];
-        
+
         using var rng = RandomNumberGenerator.Create();
         rng.GetBytes(randomNumber);
-        
+
         return Convert.ToBase64String(randomNumber);
     }
 
@@ -123,7 +123,7 @@ internal sealed class JwtService(IConfiguration configuration, IDateTimeProvider
         JwtSecurityToken? jwtToken = tokenHandler.ReadJwtToken(token);
 
         Claim? userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-        
+
         if (userIdClaim != null && Guid.TryParse(userIdClaim.Value, out Guid userId))
         {
             return userId;

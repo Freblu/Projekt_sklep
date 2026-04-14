@@ -10,14 +10,14 @@ public class MinioStorageService(IMinioClient minioClient) : IFileStorageService
     {
         BucketExistsArgs? beArgs = new BucketExistsArgs()
             .WithBucket(bucketName);
-        
+
         bool found = await minioClient.BucketExistsAsync(beArgs, cancellationToken);
-        
+
         if (!found)
         {
             MakeBucketArgs? mbArgs = new MakeBucketArgs()
                 .WithBucket(bucketName);
-            
+
             await minioClient.MakeBucketAsync(mbArgs, cancellationToken);
         }
 
@@ -38,14 +38,14 @@ public class MinioStorageService(IMinioClient minioClient) : IFileStorageService
     public async Task<Stream> GetFileAsync(string bucketName, string fileName, CancellationToken cancellationToken = default)
     {
         var memoryStream = new MemoryStream();
-        
+
         GetObjectArgs? args = new GetObjectArgs()
             .WithBucket(bucketName)
             .WithObject(fileName)
             .WithCallbackStream(stream => stream.CopyTo(memoryStream));
 
         await minioClient.GetObjectAsync(args, cancellationToken);
-        
+
         memoryStream.Position = 0;
         return memoryStream;
     }

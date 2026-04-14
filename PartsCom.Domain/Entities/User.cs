@@ -1,7 +1,7 @@
-using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 
 namespace PartsCom.Domain.Entities;
 
@@ -27,13 +27,13 @@ public sealed class User
             CreatedAt = DateTime.UtcNow
         };
     }
-    
+
     public void SetRefreshToken(string refreshToken, DateTime expiryTime)
     {
         RefreshToken = refreshToken;
         RefreshTokenExpiryTime = expiryTime;
     }
-    
+
     public bool IsRefreshTokenExpired()
     {
         if (!RefreshTokenExpiryTime.HasValue)
@@ -43,7 +43,7 @@ public sealed class User
 
         return DateTime.UtcNow >= RefreshTokenExpiryTime.Value;
     }
-    
+
     public bool IsRefreshTokenValid(string refreshToken)
     {
         return RefreshToken == refreshToken && !IsRefreshTokenExpired();
@@ -68,7 +68,7 @@ public sealed class User
     [Required]
     [MaxLength(200)]
     public string PasswordHash { get; private set; }
-    
+
     [MaxLength(44)]
     [Column(TypeName = "varchar(44)")]
     public string? RefreshToken { get; private set; }
@@ -97,9 +97,27 @@ public sealed class User
     public ICollection<BrowsingHistory> BrowsingHistories { get; private set; } = new List<BrowsingHistory>();
     public Cart? Cart { get; private set; }
 
+    public void UpdateName(string firstName, string lastName)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
     [SuppressMessage("Design", "CA1054:URI-like parameters should not be strings", Justification = "URL stored as string in database")]
     public void UpdateProfile(string? phoneNumber, string? city, string? avatarUrl)
     {
+        PhoneNumber = phoneNumber;
+        City = city;
+        AvatarUrl = avatarUrl;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    [SuppressMessage("Design", "CA1054:URI-like parameters should not be strings", Justification = "URL stored as string in database")]
+    public void UpdateFullProfile(string firstName, string lastName, string? phoneNumber, string? city, string? avatarUrl)
+    {
+        FirstName = firstName;
+        LastName = lastName;
         PhoneNumber = phoneNumber;
         City = city;
         AvatarUrl = avatarUrl;

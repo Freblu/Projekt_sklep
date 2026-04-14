@@ -1,8 +1,8 @@
 using ErrorOr;
 using MediatR;
-using PartsCom.Domain.Errors;
-using PartsCom.Domain.Entities;
 using PartsCom.Application.Interfaces;
+using PartsCom.Domain.Entities;
+using PartsCom.Domain.Errors;
 
 namespace PartsCom.Application.Commands.AddProductCategory;
 
@@ -13,7 +13,7 @@ internal sealed class AddProductCategoryCommandHandler(
     public async Task<ErrorOr<Unit>> Handle(AddProductCategoryCommand request, CancellationToken cancellationToken)
     {
         ProductCategory? existingCategory = await productCategoryRepository.GetByNameAsync(request.Name, cancellationToken);
-        
+
         if (existingCategory is not null)
         {
             return Errors.AddProductCategoryCommandHandlerCategoryAlreadyExists;

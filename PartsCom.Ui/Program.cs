@@ -31,7 +31,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 
 WebApplication app = builder.Build();
 
-app.Services.ApplyMigrations();
+await app.Services.ApplyMigrationsAndSeedAsync();
 
 app.MapDefaultEndpoints();
 

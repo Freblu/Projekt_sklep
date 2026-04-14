@@ -32,8 +32,13 @@ internal sealed class AddProductToCartCommandHandler(
             return Errors.ProductInsufficientStock;
         }
 
+        // Get product price before any modifications
+        decimal productPrice = product.Price;
+        Guid productId = product.Id;
+
         // Get or create cart
         Cart? cart = await cartRepository.GetByUserIdAsync(request.UserId, cancellationToken);
+
         if (cart == null)
         {
             cart = Cart.Create(request.UserId);
@@ -41,7 +46,7 @@ internal sealed class AddProductToCartCommandHandler(
         }
 
         // Check if product already in cart
-        CartItem? existingItem = cart.Items.FirstOrDefault(i => i.ProductId == request.ProductId);
+        CartItem? existingItem = cart.Items.FirstOrDefault(i => i.ProductId == productId);
         if (existingItem != null)
         {
             // Update quantity
@@ -49,8 +54,8 @@ internal sealed class AddProductToCartCommandHandler(
         }
         else
         {
-            // Add new item
-            var cartItem = CartItem.Create(cart.Id, product.Id, request.Quantity, product.Price);
+            // Add new item - use cart reference directly instead of creating with CartId
+            var cartItem = CartItem.Create(cart.Id, productId, request.Quantity, productPrice);
             cart.Items.Add(cartItem);
         }
 

@@ -1,7 +1,7 @@
-using MediatR;
 using ErrorOr;
 using FluentValidation;
 using FluentValidation.Results;
+using MediatR;
 using PartsCom.Application.Interfaces;
 
 namespace PartsCom.Application.Behaviors;
@@ -19,7 +19,7 @@ internal sealed class ValidationPipelineBehavior<TRequest, TResponse>(
         }
 
         ValidationFailure[] validationFailures = await ValidateAsync(request);
-        
+
         if (validationFailures.Length == 0)
         {
             return await next(cancellationToken);
@@ -36,22 +36,22 @@ internal sealed class ValidationPipelineBehavior<TRequest, TResponse>(
                 code: failure.ErrorCode,
                 description: failure.ErrorMessage))
             .ToList();
-        
+
         return (TResponse)(dynamic)errors;
 
     }
-    
+
     private async Task<ValidationFailure[]> ValidateAsync(TRequest request)
     {
         var context = new ValidationContext<TRequest>(request);
-        
+
         ValidationResult[] validationResults = await Task.WhenAll(
             validators.Select(validator => validator.ValidateAsync(context)));
-        
+
         ValidationFailure[] validationFailures = [.. validationResults
             .Where(validationResult => !validationResult.IsValid)
             .SelectMany(validationResult => validationResult.Errors)];
-        
+
         return validationFailures;
     }
 }

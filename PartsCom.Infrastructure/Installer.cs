@@ -1,12 +1,12 @@
-using Minio;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Minio;
 using PartsCom.Application.Interfaces;
 using PartsCom.Infrastructure.Database;
-using PartsCom.Infrastructure.Services;
-using Microsoft.Extensions.Configuration;
 using PartsCom.Infrastructure.Repositories;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore.Migrations;
+using PartsCom.Infrastructure.Services;
 
 namespace PartsCom.Infrastructure;
 
@@ -22,9 +22,15 @@ public static class Installer
         services.AddDbContext<PartsComDbContext>(options =>
             options
                 .UseSqlServer(
-                    configuration.GetConnectionString("PartsCom") ??
-                    throw new InvalidOperationException("Connection string 'PartsCom' not found."),
-                    cfg => cfg.MigrationsHistoryTable(HistoryRepository.DefaultTableName)
+                    configuration.GetConnectionString("PartsCom")
+                        ?? throw new InvalidOperationException(
+                            "Connection string 'PartsCom' not found."
+                        ),
+                    cfg =>
+                    {
+                        cfg.MigrationsHistoryTable(HistoryRepository.DefaultTableName);
+                        cfg.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+                    }
                 )
                 .UseSnakeCaseNamingConvention()
         );
@@ -41,17 +47,21 @@ public static class Installer
         services.AddScoped<ICartRepository, CartRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
-
+        services.AddScoped<IAddressRepository, AddressRepository>();
+        services.AddScoped<INewsRepository, NewsRepository>();
 
         var uri = new Uri(Environment.GetEnvironmentVariable("PARTSCOM-MINIO_URI") ?? "");
 
-        services.AddSingleton<IMinioClient>(_ => new MinioClient()
-            .WithEndpoint(uri.Authority)
-            .WithCredentials(
-                Environment.GetEnvironmentVariable("PARTSCOM-MINIO_ACCESSKEY"),
-                Environment.GetEnvironmentVariable("PARTSCOM-MINIO_SECRETKEY"))
-            .WithSSL(uri.Scheme == "https")
-            .Build());
+        services.AddSingleton<IMinioClient>(_ =>
+            new MinioClient()
+                .WithEndpoint(uri.Authority)
+                .WithCredentials(
+                    Environment.GetEnvironmentVariable("PARTSCOM-MINIO_ACCESSKEY"),
+                    Environment.GetEnvironmentVariable("PARTSCOM-MINIO_SECRETKEY")
+                )
+                .WithSSL(uri.Scheme == "https")
+                .Build()
+        );
 
         services.AddScoped<IFileStorageService, MinioStorageService>();
 

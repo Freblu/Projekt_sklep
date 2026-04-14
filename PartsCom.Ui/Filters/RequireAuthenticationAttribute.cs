@@ -1,8 +1,8 @@
 using ErrorOr;
 using MediatR;
-using PartsCom.Ui.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using PartsCom.Ui.Extensions;
 
 namespace PartsCom.Ui.Filters;
 
@@ -18,7 +18,7 @@ internal sealed class RequireAuthenticationAttribute : Attribute, IAsyncActionFi
             context.Result = new StatusCodeResult(StatusCodes.Status500InternalServerError);
             return;
         }
-        
+
         ErrorOr<Unit> validationResult = await context.HttpContext.ValidateTokenAsync(sender);
 
         if (validationResult.IsError)
@@ -34,7 +34,7 @@ internal sealed class RequireAuthenticationAttribute : Attribute, IAsyncActionFi
                     routeValues: new { returnUrl });
                 return;
             }
-            
+
             validationResult = await context.HttpContext.ValidateTokenAsync(sender);
 
             if (validationResult.IsError)
@@ -47,7 +47,7 @@ internal sealed class RequireAuthenticationAttribute : Attribute, IAsyncActionFi
                 return;
             }
         }
-        
+
         await next();
     }
 }

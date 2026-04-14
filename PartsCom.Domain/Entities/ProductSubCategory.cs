@@ -10,9 +10,9 @@ public sealed class ProductSubCategory
 {
     private ProductSubCategory()
     {
-        
+
     }
-    
+
     public static ProductSubCategory Create(string subCategoryName)
     {
         var subCategory = new ProductSubCategory
@@ -20,18 +20,18 @@ public sealed class ProductSubCategory
             Id = Guid.NewGuid(),
             Name = subCategoryName
         };
-        
+
         return subCategory;
     }
-    
+
     [Key]
     public Guid Id { get; private set; }
-    
+
     [Required]
     [MaxLength(100)]
     public string Name { get; private set; }
-    
+
     public Guid? ProductCategoryId { get; private set; }
-    
+
     public ProductCategory? ProductCategory { get; private set; }
 }

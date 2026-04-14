@@ -1,6 +1,6 @@
 using FluentValidation;
-using PartsCom.Application.Behaviors;
 using Microsoft.Extensions.DependencyInjection;
+using PartsCom.Application.Behaviors;
 
 namespace PartsCom.Application;
 
@@ -13,9 +13,9 @@ public static class Installer
             cfg.RegisterServicesFromAssemblies(typeof(Installer).Assembly);
             cfg.AddOpenBehavior(typeof(ValidationPipelineBehavior<,>));
         });
-        
+
         services.AddValidatorsFromAssemblies([typeof(Installer).Assembly], includeInternalTypes: true);
-        
+
         return services;
     }
 }

@@ -3,6 +3,7 @@
 .dashboard-container {
   width: 100%;
   max-width: 82.5rem;
+  padding-bottom: 60px;
 }
 
 .db-fw {

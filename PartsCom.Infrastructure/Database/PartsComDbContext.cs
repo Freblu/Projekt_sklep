@@ -1,6 +1,6 @@
-using PartsCom.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using PartsCom.Application.Interfaces;
+using PartsCom.Domain.Entities;
 
 namespace PartsCom.Infrastructure.Database;
 
@@ -34,6 +34,9 @@ internal sealed class PartsComDbContext(DbContextOptions<PartsComDbContext> opti
     internal DbSet<Permission> Permissions { get; set; }
     internal DbSet<UserRole> UserRoles { get; set; }
     internal DbSet<RolePermission> RolePermissions { get; set; }
+
+    // Content
+    internal DbSet<NewsPost> NewsPosts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

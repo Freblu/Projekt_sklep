@@ -8,7 +8,7 @@ internal static class Extensions
         where T : IResourceWithEnvironment
     {
         IConfigurationSection section = builder.ApplicationBuilder.Configuration.GetSection(sectionName);
-        
+
         foreach (KeyValuePair<string, string?> entry in section.AsEnumerable(makePathsRelative: true))
         {
             if (string.IsNullOrWhiteSpace(entry.Key) || entry.Value is null)

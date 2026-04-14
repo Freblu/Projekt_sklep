@@ -2,7 +2,7 @@ using FluentValidation;
 
 namespace PartsCom.Application.Commands.LoginUser;
 
-internal sealed class  LoginUserCommandValidator : AbstractValidator<LoginUserCommand>
+internal sealed class LoginUserCommandValidator : AbstractValidator<LoginUserCommand>
 {
     public LoginUserCommandValidator()
     {
@@ -13,7 +13,7 @@ internal sealed class  LoginUserCommandValidator : AbstractValidator<LoginUserCo
             .EmailAddress()
             .WithErrorCode("LU002")
             .WithMessage("Email is not valid");
-        
+
         RuleFor(u => u.Password)
             .NotEmpty()
             .WithErrorCode("LU003")

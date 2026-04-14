@@ -1,6 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace PartsCom.Domain.Entities;
 
@@ -10,9 +10,9 @@ public sealed class ProductCategory
 {
     private ProductCategory()
     {
-        
+
     }
-    
+
     public static ProductCategory Create(string categoryName)
     {
         var category = new ProductCategory
@@ -21,16 +21,16 @@ public sealed class ProductCategory
             Name = categoryName,
             SubCategories = []
         };
-        
+
         return category;
     }
 
     [Key]
     public Guid Id { get; private set; }
-    
+
     [Required]
     [MaxLength(100)]
     public string Name { get; private set; }
-    
+
     public ICollection<ProductSubCategory> SubCategories { get; private set; }
 }

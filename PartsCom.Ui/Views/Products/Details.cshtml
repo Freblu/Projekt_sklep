@@ -1,0 +1,360 @@
+@model ProductDetailsViewModel
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<link rel="stylesheet" href="~/css/products/details.css" asp-append-version="true" />
+
+<div class="product-details-page">
+    <div class="product-details-container">
+        <!-- Left: Image Gallery -->
+        <div class="product-gallery">
+            <div class="main-image-container">
+                <img id="mainImage" src="@Model.MainImageUrl" alt="@Model.Name" class="main-image" />
+            </div>
+            <div class="thumbnail-gallery">
+                <button class="gallery-nav gallery-prev" onclick="scrollThumbnails(-1)">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                <div class="thumbnails-wrapper">
+                    <div class="thumbnails" id="thumbnailsContainer">
+                        @for (int i = 0; i < Model.ImageUrls.Count; i++)
+                        {
+                            <div class="thumbnail @(i == 0 ? "active" : "")" onclick="changeImage('@Model.ImageUrls[i]', this)">
+                                <img src="@Model.ImageUrls[i]" alt="@Model.Name - Image @(i + 1)" />
+                            </div>
+                        }
+                    </div>
+                </div>
+                <button class="gallery-nav gallery-next" onclick="scrollThumbnails(1)">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Right: Product Info -->
+        <div class="product-info">
+            <!-- Rating -->
+            <div class="product-rating">
+                <div class="stars">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        <svg class="star @(i <= Math.Round(Model.AverageRating) ? "filled" : "")" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                    }
+                </div>
+                <span class="rating-value">@Model.AverageRating.ToString("0.0") Star Rating</span>
+                <span class="review-count">(@Model.ReviewsCount.ToString("N0") User feedback)</span>
+            </div>
+
+            <!-- Title -->
+            <h1 class="product-title">@Model.Name</h1>
+
+            <!-- Meta info -->
+            <div class="product-meta">
+                <div class="meta-row">
+                    <span class="meta-label">Sku:</span>
+                    <span class="meta-value">@Model.Id.ToString()[..8].ToUpper()</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">Availability:</span>
+                    <span class="meta-value @(Model.IsInStock ? "in-stock" : "out-of-stock")">
+                        @(Model.IsInStock ? "In Stock" : "Out of Stock")
+                    </span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">Brand:</span>
+                    <span class="meta-value brand">@(Model.Tags.FirstOrDefault() ?? "Unknown")</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">Category:</span>
+                    <span class="meta-value category">@Model.CategoryName</span>
+                </div>
+            </div>
+
+            <!-- Price -->
+            <div class="product-price">
+                <span class="current-price">@Model.Price.ToString("C0", new System.Globalization.CultureInfo("en-US"))</span>
+                @if (Model.OriginalPrice.HasValue && Model.OriginalPrice > Model.Price)
+                {
+                    <span class="original-price">@Model.OriginalPrice.Value.ToString("C0", new System.Globalization.CultureInfo("en-US"))</span>
+                    <span class="discount-badge">@Model.DiscountPercent% OFF</span>
+                }
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Variant selectors (placeholder for future implementation) -->
+            <div class="product-variants">
+                <div class="variant-group">
+                    <label class="variant-label">Color</label>
+                    <div class="color-options">
+                        <button class="color-option active" style="background-color: #7a7a7a;"></button>
+                        <button class="color-option" style="background-color: #d4d4d4;"></button>
+                    </div>
+                </div>
+                <div class="variant-group">
+                    <label class="variant-label">Size</label>
+                    <select class="variant-select">
+                        <option>14-inch Liquid Retina XDR display</option>
+                        <option>16-inch Liquid Retina XDR display</option>
+                    </select>
+                </div>
+                <div class="variant-group">
+                    <label class="variant-label">Memory</label>
+                    <select class="variant-select">
+                        <option>16GB unified memory</option>
+                        <option>32GB unified memory</option>
+                        <option>64GB unified memory</option>
+                    </select>
+                </div>
+                <div class="variant-group">
+                    <label class="variant-label">Storage</label>
+                    <select class="variant-select">
+                        <option>1TV SSD Storage</option>
+                        <option>512GB SSD Storage</option>
+                        <option>2TB SSD Storage</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Quantity and Add to Cart -->
+            <div class="product-actions">
+                <form asp-action="AddToCart" asp-controller="Cart" method="post" class="add-to-cart-form">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="productId" value="@Model.Id" />
+                    <div class="quantity-selector">
+                        <button type="button" class="qty-btn" onclick="changeQuantity(-1)">-</button>
+                        <input type="number" id="quantity" name="quantity" value="1" min="1" max="@Model.StockQuantity" class="qty-input" />
+                        <button type="button" class="qty-btn" onclick="changeQuantity(1)">+</button>
+                    </div>
+                    <button type="submit" class="btn-add-to-cart">
+                        ADD TO CART
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                    </button>
+                </form>
+                <button class="btn-buy-now">BUY NOW</button>
+            </div>
+
+            <!-- Wishlist and Compare -->
+            <div class="product-secondary-actions">
+                <button class="secondary-action">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                    Add to Wishlist
+                </button>
+                <button class="secondary-action">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="17 1 21 5 17 9"></polyline>
+                        <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                        <polyline points="7 23 3 19 7 15"></polyline>
+                        <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                    </svg>
+                    Add to Compare
+                </button>
+                <div class="share-product">
+                    <span>Share product:</span>
+                    <div class="share-icons">
+                        <a href="#" class="share-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="4"></rect></svg></a>
+                        <a href="#" class="share-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"></circle></svg></a>
+                        <a href="#" class="share-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a>
+                        <a href="#" class="share-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Safe Checkout -->
+            <div class="safe-checkout">
+                <div class="safe-checkout-header">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    <span>100% Guarantee Safe Checkout</span>
+                </div>
+                <div class="payment-icons">
+                    <img src="/img/payments/visa.svg" alt="Visa" onerror="this.style.display='none'" />
+                    <img src="/img/payments/mastercard.svg" alt="Mastercard" onerror="this.style.display='none'" />
+                    <img src="/img/payments/paypal.svg" alt="PayPal" onerror="this.style.display='none'" />
+                    <img src="/img/payments/amex.svg" alt="American Express" onerror="this.style.display='none'" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs Section -->
+    <div class="product-tabs-section">
+        <div class="tabs-header">
+            <button class="tab-btn active" data-tab="description">DESCRIPTION</button>
+            <button class="tab-btn" data-tab="additional">ADDITIONAL INFORMATION</button>
+            <button class="tab-btn" data-tab="specification">SPECIFICATION</button>
+            <button class="tab-btn" data-tab="review">REVIEW</button>
+        </div>
+
+        <div class="tabs-content">
+            <!-- Description Tab -->
+            <div class="tab-panel active" id="description">
+                <div class="description-content">
+                    <div class="description-text">
+                        <h3>Description</h3>
+                        <p>@Model.Description</p>
+                    </div>
+                    <div class="features-list">
+                        <h3>Feature</h3>
+                        <ul>
+                            <li>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-500)" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+                                Free 1 Year Warranty
+                            </li>
+                            <li>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-500)" stroke-width="2">
+                                    <rect x="1" y="3" width="15" height="13"></rect>
+                                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                                    <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                                    <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                                </svg>
+                                Free Shipping & Fasted Delivery
+                            </li>
+                            <li>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-500)" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M16 8l-8 8"></path>
+                                    <path d="M8 8l8 8"></path>
+                                </svg>
+                                100% Money-back guarantee
+                            </li>
+                            <li>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-500)" stroke-width="2">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                                24/7 Customer support
+                            </li>
+                            <li>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary-500)" stroke-width="2">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                </svg>
+                                Secure payment method
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="shipping-info">
+                        <h3>Shipping Information</h3>
+                        <ul>
+                            <li><strong>Courier:</strong> 2-4 days, free shipping</li>
+                            <li><strong>Local Shipping:</strong> up to one week, $19.00</li>
+                            <li><strong>UPS Ground Shipping:</strong> 4-6 days, $29.00</li>
+                            <li><strong>Unishop Global Export:</strong> 3-4 days, $39.00</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Information Tab -->
+            <div class="tab-panel" id="additional">
+                <div class="additional-content">
+                    <p>Additional product information will be displayed here.</p>
+                </div>
+            </div>
+
+            <!-- Specification Tab -->
+            <div class="tab-panel" id="specification">
+                <div class="specification-content">
+                    <table class="spec-table">
+                        <tr>
+                            <th>Category</th>
+                            <td>@Model.CategoryName</td>
+                        </tr>
+                        @if (!string.IsNullOrEmpty(Model.SubCategoryName))
+                        {
+                            <tr>
+                                <th>Subcategory</th>
+                                <td>@Model.SubCategoryName</td>
+                            </tr>
+                        }
+                        <tr>
+                            <th>Stock</th>
+                            <td>@Model.StockQuantity units</td>
+                        </tr>
+                        @foreach (var tag in Model.Tags)
+                        {
+                            <tr>
+                                <th>Tag</th>
+                                <td>@tag</td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+
+            <!-- Review Tab -->
+            <div class="tab-panel" id="review">
+                <div class="reviews-content">
+                    <div class="reviews-summary">
+                        <div class="average-rating">
+                            <span class="rating-number">@Model.AverageRating.ToString("0.0")</span>
+                            <div class="stars">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <svg class="star @(i <= Math.Round(Model.AverageRating) ? "filled" : "")" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                }
+                            </div>
+                            <span class="total-reviews">@Model.ReviewsCount reviews</span>
+                        </div>
+                    </div>
+                    <div class="reviews-list">
+                        @if (Model.Reviews.Count == 0)
+                        {
+                            <p class="no-reviews">No reviews yet. Be the first to review this product!</p>
+                        }
+                        else
+                        {
+                            @foreach (var review in Model.Reviews)
+                            {
+                                <div class="review-item">
+                                    <div class="review-header">
+                                        <div class="reviewer-info">
+                                            <span class="reviewer-name">@review.UserName</span>
+                                            <span class="review-date">@review.CreatedAt.ToString("MMM dd, yyyy")</span>
+                                        </div>
+                                        <div class="review-rating">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                <svg class="star @(i <= review.Rating ? "filled" : "")" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                                </svg>
+                                            }
+                                        </div>
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(review.Comment))
+                                    {
+                                        <p class="review-comment">@review.Comment</p>
+                                    }
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/products/details.js" asp-append-version="true"></script>
+}

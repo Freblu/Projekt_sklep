@@ -1,14 +1,14 @@
 using ErrorOr;
 using MediatR;
-using PartsCom.Ui.Models;
-using PartsCom.Ui.Filters;
 using Microsoft.AspNetCore.Mvc;
+using PartsCom.Application.Commands.CreateProduct;
+using PartsCom.Application.Commands.DeleteProduct;
+using PartsCom.Application.Commands.UpdateProduct;
 using PartsCom.Application.Queries.GetAdminDashboardData;
 using PartsCom.Application.Queries.GetAdminProducts;
 using PartsCom.Application.Queries.GetProductById;
-using PartsCom.Application.Commands.CreateProduct;
-using PartsCom.Application.Commands.UpdateProduct;
-using PartsCom.Application.Commands.DeleteProduct;
+using PartsCom.Ui.Filters;
+using PartsCom.Ui.Models;
 
 namespace PartsCom.Ui.Controllers;
 

@@ -1,6 +1,6 @@
-using PartsCom.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using PartsCom.Application.Interfaces;
+using PartsCom.Domain.Entities;
 using PartsCom.Infrastructure.Database;
 
 namespace PartsCom.Infrastructure.Repositories;
@@ -49,5 +49,17 @@ internal sealed class UserRepository(PartsComDbContext dbContext) : IUserReposit
     public Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken = default)
     {
         return dbContext.Users.AnyAsync(u => u.Email == email, cancellationToken);
+    }
+
+    public async Task<User?> GetByIdWithDashboardDataAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await dbContext.Users
+            .Include(u => u.Addresses)
+            .Include(u => u.Orders)
+                .ThenInclude(o => o.Items)
+            .Include(u => u.PaymentCards)
+            .Include(u => u.BrowsingHistories)
+                .ThenInclude(bh => bh.Product)
+            .SingleOrDefaultAsync(u => u.Id == id, cancellationToken);
     }
 }

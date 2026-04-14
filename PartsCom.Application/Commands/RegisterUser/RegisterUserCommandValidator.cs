@@ -13,7 +13,7 @@ internal sealed class RegisterUserCommandValidator : AbstractValidator<RegisterU
             .MaximumLength(100)
             .WithErrorCode("RU002")
             .WithMessage("First Name must not exceed 100 characters");
-        
+
         RuleFor(c => c.LastName)
             .NotEmpty()
             .WithErrorCode("RU003")
@@ -21,7 +21,7 @@ internal sealed class RegisterUserCommandValidator : AbstractValidator<RegisterU
             .MaximumLength(100)
             .WithErrorCode("RU004")
             .WithMessage("Last Name must not exceed 100 characters");
-        
+
         RuleFor(c => c.Email)
             .NotEmpty()
             .WithErrorCode("RU004")
@@ -29,7 +29,7 @@ internal sealed class RegisterUserCommandValidator : AbstractValidator<RegisterU
             .EmailAddress()
             .WithErrorCode("RU005")
             .WithMessage("Email must be a valid email address");
-        
+
         RuleFor(c => c.Password)
             .NotEmpty()
             .WithErrorCode("RU006")
@@ -49,7 +49,7 @@ internal sealed class RegisterUserCommandValidator : AbstractValidator<RegisterU
             .Matches("[^a-zA-Z0-9]")
             .WithErrorCode("RU011")
             .WithMessage("Password must contain at least one special character");
-        
+
         RuleFor(c => c.ConfirmPassword)
             .NotEmpty()
             .WithErrorCode("RU012")

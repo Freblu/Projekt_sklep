@@ -1,5 +1,5 @@
-using PartsCom.AppHost;
 using Microsoft.Extensions.Configuration;
+using PartsCom.AppHost;
 
 IDistributedApplicationBuilder builder = DistributedApplication.CreateBuilder(args);
 
@@ -14,7 +14,7 @@ IResourceBuilder<SqlServerDatabaseResource> database = builder
 IResourceBuilder<MinioContainerResource> minio = builder.AddMinioContainer("partscom-minio", minioRootUserParam, minioRootPasswordParam)
     .WithDataVolume("minio-data");
 
-builder.AddProject<Projects.PartsCom_Ui>("partscom-ui") 
+builder.AddProject<Projects.PartsCom_Ui>("partscom-ui")
     .WithReference(database)
     .WithReference(minio)
     .WaitFor(database)

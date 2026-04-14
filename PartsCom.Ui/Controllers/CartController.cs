@@ -1,4 +1,4 @@
-﻿using ErrorOr;
+using ErrorOr;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PartsCom.Application.Commands.AddProductToCart;
@@ -32,6 +32,8 @@ public sealed class CartController(ISender sender) : Controller
         // Map to ViewModel
         var viewModel = result.Value.Cart.Items.Select(item => new CartItemViewModel
         {
+            CartItemId = item.Id,
+            ProductId = item.ProductId,
             Name = item.ProductName,
             Quantity = item.Quantity,
             Price = item.UnitPrice,

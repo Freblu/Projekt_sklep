@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.Extensions.Configuration;
 
 namespace PartsCom.Infrastructure.Database.Factories;
 
@@ -14,7 +14,7 @@ internal sealed class PartsComDbContextFactory : IDesignTimeDbContextFactory<Par
         IConfiguration configuration = new ConfigurationBuilder()
             .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "..", InfrastructureDirectoryName))
             .Build();
-        
+
         string connectionString = configuration.GetConnectionString("PartsCom");
 
         DbContextOptionsBuilder<PartsComDbContext> optionsBuilder = new();

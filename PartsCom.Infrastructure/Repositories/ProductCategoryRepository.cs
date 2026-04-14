@@ -1,6 +1,6 @@
-using PartsCom.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using PartsCom.Application.Interfaces;
+using PartsCom.Domain.Entities;
 using PartsCom.Infrastructure.Database;
 
 namespace PartsCom.Infrastructure.Repositories;

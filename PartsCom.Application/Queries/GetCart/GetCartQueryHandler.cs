@@ -13,7 +13,7 @@ internal sealed class GetCartQueryHandler(
         GetCartQuery request,
         CancellationToken cancellationToken)
     {
-        Cart? cart = await cartRepository.GetByUserIdAsync(request.UserId, cancellationToken);
+        Cart? cart = await cartRepository.GetByUserIdWithProductsAsync(request.UserId, cancellationToken);
 
         if (cart == null)
         {
